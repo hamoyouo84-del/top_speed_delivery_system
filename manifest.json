@@ -1,0 +1,17 @@
+{
+  "name": "Top Speed Delivery System",
+  "short_name": "TopSpeed",
+  "description": "نظام إدارة توصيل الطلبات والمناديب",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#0088ff",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/726/726455.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
