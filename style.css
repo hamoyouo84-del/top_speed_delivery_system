@@ -1,0 +1,197 @@
+/* --- VARIABLES & RESET --- */
+:root {
+    --primary: #0088ff;
+    --accent: #00c3ff;
+    --white: #ffffff;
+    --bg-dark: #050505;
+    --glow-strong: 0 0 25px var(--primary), 0 0 50px var(--primary);
+    --glow-subtle: 0 0 10px rgba(0, 136, 255, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Orbitron', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    overflow: hidden;
+    flex-direction: column;
+    /* Subtle vignette for depth */
+    background-image: radial-gradient(circle at center, #111 0%, #000 100%);
+}
+
+/* --- BACKGROUND GRID TEXTURE --- */
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(0, 136, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 136, 255, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* --- LOADER CONTAINER --- */
+.loader-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner-box {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* --- RINGS --- */
+.circle-border {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+/* Outer Glow Ring */
+.ring-1 {
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--primary);
+    border-left: 2px solid transparent;
+    border-right: 2px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 3s linear infinite;
+    box-shadow: 0 0 15px rgba(0, 136, 255, 0.2);
+}
+
+/* The Conic Gradient Ring (The "Tail" Effect) */
+.ring-2 {
+    width: 85%;
+    height: 85%;
+    border-radius: 50%;
+    position: absolute;
+    background: conic-gradient(from 0deg, transparent 0%, transparent 40%, var(--accent) 100%);
+    mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 3px));
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 3px));
+    animation: spin 1.5s linear infinite;
+}
+
+/* Inner Dashed Ring */
+.ring-3 {
+    width: 65%;
+    height: 65%;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: spinReverse 10s linear infinite;
+}
+
+/* --- TEXT ELEMENTS --- */
+.percentage {
+    position: absolute;
+    color: var(--white);
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 0 0 10px var(--primary);
+    z-index: 10;
+    transform: translateY(-20px);
+    /* Move up slightly to clear the core */
+}
+
+.status-text {
+    margin-top: 15px;
+    /* Spacing from center */
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    position: absolute;
+    bottom: 80px;
+    /* Position inside ring or below */
+    animation: blinkText 2s infinite;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinReverse {
+    0% {
+        transform: rotate(360deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes blinkText {
+
+    0%,
+    100% {
+        opacity: 1;
+        text-shadow: 0 0 10px var(--accent);
+    }
+
+    50% {
+        opacity: 0.5;
+        text-shadow: none;
+    }
+}
+
+/* --- FINISH STATES --- */
+.loader-container.finished .ring-1,
+.loader-container.finished .ring-2,
+.loader-container.finished .ring-3 {
+    opacity: 0;
+    transition: all 0.8s ease-out;
+    transform: scale(1.5);
+    /* Rings expand out */
+}
+
+.loader-container.finished .core {
+    transform: scale(30);
+    /* Flash effect */
+    opacity: 0;
+    transition: all 0.5s ease-out;
+}
+
+.loader-container.finished .percentage {
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--accent);
+    transform: scale(1.1) translateY(0);
+    transition: all 0.5s ease;
+}
+
+.loader-container.finished .status-text {
+    animation: none;
+    opacity: 1;
+    letter-spacing: 6px;
+    transition: all 0.5s ease;
+    color: var(--white);
+}
